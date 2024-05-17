@@ -6,7 +6,7 @@ export const IS_LOCALHOST = process.env.DOMAIN_FORMAT === 'LOCALHOST';
 export const INVOTASTIC_HOST = IS_LOCALHOST ? 'localhost:6001' : VANITY_DOMAIN_TO_USE;
 
 export const APPLICATION_LOGIN_URL = `https://${process.env.APPLICATION_DOMAIN}/login`;
-export const AUTH_CALLBACK_URL = `http://${authCallbackTenantDomain}${INVOTASTIC_HOST}/api/auth/callback`;
+export const AUTH_CALLBACK_URL = `https://${authCallbackTenantDomain}${INVOTASTIC_HOST}/api/auth/callback`;
 export const JSON_MEDIA_TYPE = 'application/json;charset=UTF-8';
 export const LOGIN_STATE_COOKIE_PREFIX = 'login:';
 export const LOGIN_STATE_COOKIE_SECRET = '7ffdbecc-ab7d-4134-9307-2dfcc52f7475';
