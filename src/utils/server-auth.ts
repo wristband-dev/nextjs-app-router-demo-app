@@ -100,6 +100,8 @@ export async function callback(req: NextApiRequest, res: NextApiResponse): Promi
 
   const { cookies, query } = req;
   const { code, state, error, error_description: errorDescription } = query;
+  console.log('COOKIES: : ', cookies);
+  console.log('QUERY: ', query);
 
   // Grab the login state cookie.
   const matchingLoginCookieNames = Object.keys(cookies).filter((cookieName) =>
@@ -107,6 +109,7 @@ export async function callback(req: NextApiRequest, res: NextApiResponse): Promi
   );
   const cookieName = matchingLoginCookieNames[0];
   const loginStateCookie = cookies[cookieName];
+  console.log('LOGIN STATE COOKIE: ', matchingLoginCookieNames, cookieName, loginStateCookie);
 
   if (!loginStateCookie) {
     console.warn(`Login state cookie not found. Redirecting to application-level login.`);

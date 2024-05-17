@@ -9,9 +9,12 @@ export default async function handleCallback(req: NextApiRequest, res: NextApiRe
   try {
     /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
     // After the user authenticates, exchange the incoming authorization code for JWTs and also retrieve userinfo.
+    console.log('REACHED CALLBACK!!!');
     const callbackData = await callback(req, res);
+    console.log('CALLBACK DATA: ', callbackData);
 
     if (!callbackData) {
+      console.log('NO CALLBACK DATA... RETURN');
       return;
     }
 
@@ -24,11 +27,14 @@ export default async function handleCallback(req: NextApiRequest, res: NextApiRe
     session.refreshToken = callbackData.refreshToken;
     session.user = parseUserinfo(callbackData.userinfo);
     session.tenantDomainName = callbackData.tenantDomainName;
+    console.log('SESSION: ', session);
 
     await session.save();
 
     // Send the user back to the Invotastic application.
     const tenantDomain = IS_LOCALHOST ? '' : `${callbackData.tenantDomainName}.`;
+    console.log('TENANT DOMAIN: ', tenantDomain);
+    console.log('REDIRECT: ', `http://${tenantDomain}${INVOTASTIC_HOST}`);
     res.redirect(callbackData.returnUrl || `http://${tenantDomain}${INVOTASTIC_HOST}`);
   } catch (error: unknown) {
     console.error(error);
