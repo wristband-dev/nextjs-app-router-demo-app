@@ -49,9 +49,12 @@ export async function login(req: NextApiRequest, res: NextApiResponse): Promise<
   const { headers, query } = req;
   const { host } = headers;
   const { tenant_domain: tenantDomain, return_url: returnUrl, login_hint: loginHint } = query;
+  console.log('HOST: ', host);
+  console.log('QUERY: ', query);
 
   const tenantDomainParam: string = Array.isArray(tenantDomain) ? tenantDomain[0] : tenantDomain || '';
   const tenantDomainName = IS_LOCALHOST ? tenantDomainParam : parseTenantDomainName(host);
+  console.log('TENANT DOMAIN: ', tenantDomainParam, tenantDomainName);
 
   // Make sure domain is valid before attempting OAuth2 Auth Code flow for tenant-level login.
   if (!tenantDomainName) {

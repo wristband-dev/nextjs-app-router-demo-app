@@ -40,6 +40,7 @@ export function getDeleteValueForLoginStateCookieHeader(cookieName: string): str
 }
 
 export function isValidDomain(host: string = '', tenantDomainName: string = '') {
+  console.log('IS VALID: ', host, `${tenantDomainName}.${INVOTASTIC_HOST}`);
   return host === `${tenantDomainName}.${INVOTASTIC_HOST}`;
 }
 
