@@ -10,7 +10,7 @@ import {
   INVOTASTIC_HOST,
   IS_LOCALHOST,
   LOGIN_STATE_COOKIE_PREFIX,
-} from './constants';
+} from '../utils/constants';
 import {
   createCodeChallenge,
   createUniqueCryptoStr,
@@ -21,7 +21,7 @@ import {
   parseTenantDomainName,
   toQueryString,
   updateLoginStateCookie,
-} from './helpers';
+} from '../utils/helpers';
 
 export function bearerToken(accessToken: string) {
   return { headers: { Authorization: `Bearer ${accessToken}` } };
@@ -49,12 +49,9 @@ export async function login(req: NextApiRequest, res: NextApiResponse): Promise<
   const { headers, query } = req;
   const { host } = headers;
   const { tenant_domain: tenantDomain, return_url: returnUrl, login_hint: loginHint } = query;
-  console.log('HOST: ', host);
-  console.log('QUERY: ', query);
 
   const tenantDomainParam: string = Array.isArray(tenantDomain) ? tenantDomain[0] : tenantDomain || '';
   const tenantDomainName = IS_LOCALHOST ? tenantDomainParam : parseTenantDomainName(host);
-  console.log('TENANT DOMAIN: ', tenantDomainParam, tenantDomainName);
 
   // Make sure domain is valid before attempting OAuth2 Auth Code flow for tenant-level login.
   if (!tenantDomainName) {
@@ -100,8 +97,6 @@ export async function callback(req: NextApiRequest, res: NextApiResponse): Promi
 
   const { cookies, query } = req;
   const { code, state, error, error_description: errorDescription } = query;
-  console.log('COOKIES: : ', cookies);
-  console.log('QUERY: ', query);
 
   // Grab the login state cookie.
   const matchingLoginCookieNames = Object.keys(cookies).filter((cookieName) =>
@@ -109,7 +104,6 @@ export async function callback(req: NextApiRequest, res: NextApiResponse): Promi
   );
   const cookieName = matchingLoginCookieNames[0];
   const loginStateCookie = cookies[cookieName];
-  console.log('LOGIN STATE COOKIE: ', matchingLoginCookieNames, cookieName, loginStateCookie);
 
   if (!loginStateCookie) {
     console.warn(`Login state cookie not found. Redirecting to application-level login.`);

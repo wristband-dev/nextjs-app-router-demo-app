@@ -21,9 +21,9 @@
 
 <br/>
 
-# Invotastic for Business (NextJS, App Router) -- A multi-tenant demo app
+# Invotastic for Business (NextJS, Page Router) -- A multi-tenant demo app
 
-"Invotastic for Business" is a multi-tenant demo app that serves other companies as its customers. This repo utilizes a "Backend Server" OAuth2 client type. The backend server technology here is NextJS, and the router type is the App Router. It demonstrates both how to protect API routes as well as getServerSideProps() function.
+"Invotastic for Business" is a multi-tenant demo app that serves other companies as its customers. This repo utilizes a "Backend Server" OAuth2 client type. The backend server technology here is NextJS, and the router type is the Page Router. It demonstrates both how to protect API routes as well as getServerSideProps() function.
 <br>
 <br>
 
@@ -42,13 +42,13 @@ You can start up the Invotastic for Business demo application in a few simple st
 
 First thing is first: make sure you sign up for an Wristband account at [https://wristband.dev](https://wristband.dev).
 
-### 2) Provision the B2B NextJS App Router demo application in the Wristband Dashboard.
+### 2) Provision the B2B NextJS Page Router demo application in the Wristband Dashboard.
 
 After your Wristband account is set up, log in to the Wristband dashboard.  Once you land on the home page of the dashboard, click the button labelled "Add Demo App".  Make sure you choose the following options:
 
 - Step 1: App Type - B2B
 - Step 2: Subject to Authenticate - Humans
-- Step 3: Client Framework - NextJS (App Router)
+- Step 3: Client Framework - NextJS (Page Router)
 - Step 4: Domain Format  - Choosing `Localhost` is fastest to setup. You can alternatively choose `Vanity Domain` if you want a production-like experience on your local machine for tenant-specific vanity domains, but this method will require additional setup.
 
 ### 3) Apply your Wristband configuration values to the NextJS server configuration
