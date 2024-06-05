@@ -17,6 +17,9 @@ async function performTokenRefresh(refreshToken: string) {
   // This condition is here for local development when the Wristband platform is also local.  This
   // will never be the case in production.
   const protocol = process.env.NEXT_PUBLIC_TRUST_SELF_SIGNED_CERT ? 'http' : 'https';
+  console.log('TOKEN ENDPOINT: ', `${protocol}://${process.env.APPLICATION_DOMAIN}/api/v1/oauth2/token`);
+  console.log('TOKEN HEADERS: ', BASIC_AUTH_FETCH_HEADERS);
+  console.log('REFRESH TOKEN: ', refreshToken);
   const res = await fetch(`${protocol}://${process.env.APPLICATION_DOMAIN}/api/v1/oauth2/token`, {
     method: 'POST',
     headers: BASIC_AUTH_FETCH_HEADERS,
