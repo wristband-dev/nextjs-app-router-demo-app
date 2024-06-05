@@ -3,7 +3,7 @@ export const INVOTASTIC_HOST = IS_LOCALHOST ? 'localhost:6001' : 'business.invot
 const authCallbackTenantDomain = IS_LOCALHOST ? '' : '{tenant_domain}.';
 
 export const APPLICATION_LOGIN_URL = `https://${process.env.APPLICATION_DOMAIN}/login`;
-export const AUTH_CALLBACK_URL = `http://${authCallbackTenantDomain}${INVOTASTIC_HOST}/api/auth/callback`;
+export const AUTH_CALLBACK_URL = `https://${authCallbackTenantDomain}${INVOTASTIC_HOST}/api/auth/callback`;
 export const LOGIN_STATE_COOKIE_PREFIX = 'login:';
 export const LOGIN_STATE_COOKIE_SECRET = '7ffdbecc-ab7d-4134-9307-2dfcc52f7475';
 export const SESSION_COOKIE_NAME = 'sid';
