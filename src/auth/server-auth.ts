@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 import {
@@ -27,7 +26,7 @@ import {
   decryptLoginState,
   encryptLoginState,
   getAuthorizeUrl,
-  getLoginStateCookieName,
+  getAndClearLoginStateCookie,
   parseTenantSubdomain,
   resolveTenantDomain,
 } from '@/utils/helpers';
@@ -49,6 +48,10 @@ export async function login(req: NextRequest, config: LoginConfig = {}): Promise
   const customState = !!config.customState && !!Object.keys(config.customState).length ? config.customState : undefined;
   const loginState: LoginState = createLoginState(req, AUTH_CALLBACK_URL, { tenantDomainName, customState });
 
+  // Clear any stale login state cookies and add a new one for the current request.
+  const encryptedLoginState: string = await encryptLoginState(loginState, LOGIN_STATE_COOKIE_SECRET);
+  createLoginStateCookie(loginState.state, encryptedLoginState, true);
+
   // Create the Wristband Authorize Endpoint URL which the user will get redirectd to.
   const authorizeUrl: string = getAuthorizeUrl(req, {
     wristbandApplicationDomain: process.env.APPLICATION_DOMAIN!,
@@ -62,12 +65,7 @@ export async function login(req: NextRequest, config: LoginConfig = {}): Promise
   });
 
   // Perform the redirect to Wristband's Authorize Endpoint.
-  const redirectResponse = NextResponse.redirect(authorizeUrl, { status: 302, headers: NO_CACHE_HEADERS });
-
-  // Clear any stale login state cookies and add a new one for the current request.
-  const encryptedLoginState: string = await encryptLoginState(loginState, LOGIN_STATE_COOKIE_SECRET);
-  createLoginStateCookie(req, redirectResponse, loginState.state, encryptedLoginState, true);
-  return redirectResponse;
+  return NextResponse.redirect(authorizeUrl, { status: 302, headers: NO_CACHE_HEADERS });
 }
 
 export async function callback(req: NextRequest): Promise<CallbackResult> {
@@ -96,16 +94,13 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
     !IS_LOCALHOST && !!tenantSubdomain ? `http://${tenantSubdomain}${INVOTASTIC_HOST}/api/auth/login` : '';
 
   // Make sure the login state cookie exists, extract it, and set it to be cleared by the server.
-  const loginStateCookieName: string = getLoginStateCookieName(req);
-  console.log('COOKIE NAME: ', loginStateCookieName);
-  if (!loginStateCookieName) {
+  const loginStateCookie: string = getAndClearLoginStateCookie(req);
+  console.log('COOKIE VALUE: ', loginStateCookie);
+  if (!loginStateCookie) {
     console.warn(`Login state cookie not found. Redirecting to login.`);
     return { redirectUrl: tenantLoginUrl || appLoginUrl, result: CallbackResultType.REDIRECT_REQUIRED };
   }
 
-  const loginStateCookie = req.cookies.get(loginStateCookieName)?.value;
-  cookies().delete(loginStateCookieName);
-  console.log('COOKIE VALUE: ', loginStateCookie);
   const loginState: LoginState = await decryptLoginState(loginStateCookie!, LOGIN_STATE_COOKIE_SECRET);
   const { codeVerifier, customState, returnUrl, state: cookieState, tenantDomainName } = loginState;
 
@@ -114,7 +109,6 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
   // Ensure there is a proper tenantDomain
   if (IS_LOCALHOST && !tenantDomainName) {
     console.log('REDIRECT 01!!');
-    // redirectResponse.cookies.delete(loginStateCookieName);
     return { redirectUrl: appLoginUrl, result: CallbackResultType.REDIRECT_REQUIRED };
   }
   if (!IS_LOCALHOST && tenantSubdomain !== tenantDomainName) {

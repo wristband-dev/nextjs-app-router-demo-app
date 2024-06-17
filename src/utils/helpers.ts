@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { NextRequest } from 'next/server';
 import { createHash, randomBytes } from 'crypto';
 import { defaults, seal, unseal } from 'iron-webcrypto';
 import * as crypto from 'uncrypto';
@@ -69,15 +70,14 @@ export async function encryptLoginState(loginState: LoginState, loginStateSecret
 }
 
 export function createLoginStateCookie(
-  req: NextRequest,
-  res: NextResponse,
   state: string,
   encryptedLoginState: string,
   dangerouslyDisableSecureCookies: boolean
 ) {
+  const cookiesList = cookies();
   // The max amount of concurrent login state cookies we allow is 3.  If there are already 3 cookies,
   // then we clear the one with the oldest creation timestamp to make room for the new one.
-  const allLoginCookieNames = Object.keys(req.cookies).filter((cookieName) => {
+  const allLoginCookieNames = Object.keys(cookiesList).filter((cookieName) => {
     return cookieName.startsWith(`${LOGIN_STATE_COOKIE_PREFIX}`);
   });
 
@@ -95,7 +95,7 @@ export function createLoginStateCookie(
       const timestamp = cookieName.split(':')[2];
       // If 3 cookies exist, then we delete the oldest one to make room for the new one.
       if (!mostRecentTimestamps.includes(timestamp)) {
-        res.cookies.delete(cookieName);
+        cookiesList.delete(cookieName);
       }
     });
   }
@@ -103,7 +103,7 @@ export function createLoginStateCookie(
   // Now add the new login state cookie with a 1-hour expiration time.
   // NOTE: If deploying your own app to production, do not disable secure cookies.
   const newCookieName: string = `${LOGIN_STATE_COOKIE_PREFIX}${state}:${Date.now().valueOf()}`;
-  res.cookies.set(newCookieName, encryptedLoginState, {
+  cookiesList.set(newCookieName, encryptedLoginState, {
     httpOnly: true,
     maxAge: 3600,
     path: '/',
@@ -148,48 +148,31 @@ export function getAuthorizeUrl(
   return `https://${authorizeUrl}?${queryParams.toString()}`;
 }
 
-export function getLoginStateCookieName(req: NextRequest): string {
+export function getAndClearLoginStateCookie(req: NextRequest): string {
+  const cookieList = cookies();
   const state = req.nextUrl.searchParams.get('state');
   const paramState = state ? state.toString() : '';
 
   // This should always resolve to a single cookie with this prefix, or possibly no cookie at all
   // if it got cleared or expired before the callback was triggered.
-  const matchingLoginCookieNames: string[] = req.cookies
+  const matchingLoginCookieNames: string[] = cookieList
     .getAll()
     .filter((cookie) => {
       return cookie.name.startsWith(`${LOGIN_STATE_COOKIE_PREFIX}${paramState}:`);
     })
     .map((cookie) => cookie.name);
 
+  let loginStateCookie: string | undefined = '';
+
   if (matchingLoginCookieNames.length > 0) {
-    return matchingLoginCookieNames[0];
+    const cookieName = matchingLoginCookieNames[0];
+    loginStateCookie = cookieList.get(cookieName)?.value;
+    // Delete the login state cookie.
+    cookieList.delete(cookieName);
   }
 
-  return '';
+  return loginStateCookie || '';
 }
-
-// export function getAndClearLoginStateCookie(req: NextRequest, res: NextResponse): string {
-//   const { cookies } = req;
-//   const state = req.nextUrl.searchParams.get('state');
-//   const paramState = state ? state.toString() : '';
-
-//   // This should always resolve to a single cookie with this prefix, or possibly no cookie at all
-//   // if it got cleared or expired before the callback was triggered.
-//   const matchingLoginCookieNames: string[] = Object.keys(cookies).filter((cookieName) => {
-//     return cookieName.startsWith(`${LOGIN_STATE_COOKIE_PREFIX}${paramState}:`);
-//   });
-
-//   let loginStateCookie: string = '';
-
-//   if (matchingLoginCookieNames.length > 0) {
-//     const cookieName = matchingLoginCookieNames[0];
-//     loginStateCookie = cookies.get(cookieName)?.value!;
-//     // Delete the login state cookie.
-//     res.cookies.delete(cookieName);
-//   }
-
-//   return loginStateCookie;
-// }
 
 export async function decryptLoginState(loginStateCookie: string, loginStateSecret: string): Promise<LoginState> {
   const loginState: unknown = await unseal(crypto, loginStateCookie, loginStateSecret, defaults);
