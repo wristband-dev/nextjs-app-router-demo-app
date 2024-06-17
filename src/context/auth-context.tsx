@@ -1,7 +1,8 @@
+'use client';
+
 import React, { createContext, useEffect, useState } from 'react';
 
 import { clientRedirectTologin, clientRedirectToLogout } from '@/auth/client-auth';
-import { apiClient as axios } from '@/client/browser-axios-client';
 import { User } from '@/types';
 
 type State = { isAuthenticated: boolean; user: User | null; tenantDomainName: string | null };
@@ -17,15 +18,25 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const fetchSession = async () => {
       try {
         /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
-        const res = await axios.get('/api/auth/session', { baseURL: window.location.origin });
-        const { isAuthenticated, user, tenantDomainName } = res.data;
-        if (!isAuthenticated) {
-          clientRedirectTologin(window.location.href);
-        } else {
-          setIsAuthenticated(true);
-          setUser(user);
-          setTenantDomainName(tenantDomainName);
+        const res = await fetch(`/api/auth/session`, { cache: 'no-store', method: 'GET' });
+
+        if (res.status !== 200) {
+          clientRedirectToLogout();
+          return;
         }
+
+        const data = await res.json();
+        const { isAuthenticated, user, tenantDomainName } = data;
+        if (!isAuthenticated) {
+          // We want to preserve the page route that the user lands on when they com back after re-authentication.
+          clientRedirectTologin(window.location.href);
+          return;
+        }
+
+        // At this point, the session data is initialized and ready to rock.
+        setIsAuthenticated(true);
+        setUser(user);
+        setTenantDomainName(tenantDomainName);
       } catch (error) {
         console.log(error);
         clientRedirectToLogout();

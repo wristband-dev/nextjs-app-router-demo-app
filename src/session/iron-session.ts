@@ -3,8 +3,9 @@ import * as http from 'http';
 
 import { SESSION_COOKIE_NAME, SESSION_COOKIE_SECRET } from '@/utils/constants';
 import { User } from '@/types';
+import { cookies } from 'next/headers';
 
-type SessionData = {
+export type SessionData = {
   accessToken: string;
   expiresAt: number;
   isAuthenticated: boolean;
@@ -13,7 +14,7 @@ type SessionData = {
   user: User;
 };
 
-const sessionOptions: SessionOptions = {
+export const sessionOptions: SessionOptions = {
   cookieName: SESSION_COOKIE_NAME,
   password: SESSION_COOKIE_SECRET,
   cookieOptions: {
@@ -21,14 +22,19 @@ const sessionOptions: SessionOptions = {
     maxAge: 1800,
     path: '/',
     sameSite: 'lax',
-    // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
-    secure: process.env.NODE_ENV === 'production',
+    // NOTE: If deploying your own app to production, do not disable secure cookies.
+    secure: false,
   },
 };
 
-export function getSession(
+export function legacyGetSession(
   req: http.IncomingMessage | Request,
   res: http.ServerResponse | Response
 ): Promise<IronSession<SessionData>> {
-  return getIronSession(req, res, sessionOptions);
+  return getIronSession<SessionData>(req, res, sessionOptions);
+}
+
+
+export function getSession(): Promise<IronSession<SessionData>> {
+  return getIronSession<SessionData>(cookies(), sessionOptions);
 }

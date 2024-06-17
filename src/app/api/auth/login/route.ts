@@ -1,12 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextRequest } from 'next/server';
 
 import { login } from '@/auth/server-auth';
 
-export default async function handleLogin(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
   try {
     /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
     // Redirect out to the Wristband authorize endpoint to start the login process via OAuth2/OIDC Auth Code flow.
-    await login(req, res);
+    return await login(req);
   } catch (error) {
     console.error(error);
   }
