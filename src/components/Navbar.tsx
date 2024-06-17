@@ -1,9 +1,11 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 
-import Logo from '../../public/Logo.png';
+import Logo from '../../public/logo.png';
 import { clientRedirectToLogout } from '@/auth/client-auth';
 
 const Navbar = () => {
@@ -13,21 +15,27 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full h-16 shadow-xl bg-purple text-white">
-      <div className="flex justify-between items-center h-full w-full px-4 2xl:px-16">
-        <Link href="/">
-          <Image src={Logo} alt="Logo" height="40" className="cursor-pointer" priority />
+    <nav className="fixed z-[999] w-full h-16 shadow-xl bg-purple-800 text-white">
+      <div className="flex justify-between items-center h-full w-full pl-6 pr-8 2xl:px-16">
+        <Link href="/" as={'image'}>
+          <Image className="h-auto cursor-pointer" src={Logo} alt="Logo" width="180" priority quality={100} />
         </Link>
         <div className="hidden sm:flex">
           <ul className="hidden sm:flex">
             <Link href="/">
-              <li className="ml-8 capitalize hover:border-b text-xl">Home</li>
+              <li className="ml-8 capitalize border-b-2 border-transparent hover:border-white transition ease-in-out duration-200 text-xl">
+                Home
+              </li>
             </Link>
             <Link href="/settings">
-              <li className="ml-8 capitalize hover:border-b text-xl">Settings</li>
+              <li className="ml-8 capitalize border-b-2 border-transparent hover:border-white transition ease-in-out duration-200 text-xl">
+                Settings
+              </li>
             </Link>
             <div onClick={clientRedirectToLogout} className="cursor-pointer">
-              <li className="mx-8 capitalize hover:border-b text-xl">Log Out</li>
+              <li className="ml-8 capitalize border-b-2 border-transparent hover:border-white transition ease-in-out duration-200 text-xl">
+                Log Out
+              </li>
             </div>
           </ul>
         </div>

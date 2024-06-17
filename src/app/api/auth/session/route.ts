@@ -1,10 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
+
 import { getSession } from '@/session/iron-session';
 
-export default async function sessionRoute(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession(req, res);
+export async function GET() {
+  const session = await getSession();
   const { isAuthenticated, tenantDomainName, user } = session;
-  res.status(200).json({
+  return NextResponse.json({
     isAuthenticated,
     user: isAuthenticated ? user : null,
     tenantDomainName: isAuthenticated ? tenantDomainName : null,
