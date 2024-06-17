@@ -35,9 +35,7 @@ export default function NameForm() {
         </button>
       )}
       <p className="mt-4 font-light">{state?.message}</p>
-      {state.authError && (
-        <p className="my-4 font-light">Please login again.</p>
-      )}
+      {state.authError && <p className="my-4 font-light">Please login again.</p>}
     </form>
   );
-};
+}

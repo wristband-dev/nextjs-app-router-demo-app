@@ -1,8 +1,8 @@
-'use server'
+'use server';
 
-import { getSession } from "@/session/iron-session";
-import { JSON_MEDIA_TYPE } from "@/utils/constants";
-import { redirect } from "next/navigation";
+import { getSession } from '@/session/iron-session';
+import { JSON_MEDIA_TYPE } from '@/utils/constants';
+import { redirect } from 'next/navigation';
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -14,7 +14,7 @@ function redirectToLoginApiRoute() {
   // console, even though the redirect does succeed.
   redirect(`/api/auth/login`);
 }
- 
+
 export async function sayName(prevState: { message: string }, formData: FormData) {
   const session = await getSession();
   const { isAuthenticated } = session;
@@ -31,7 +31,7 @@ export async function sayName(prevState: { message: string }, formData: FormData
 
   return { message: `My name is ${formData.get('username')}`, authError: false };
 }
- 
+
 export async function getSettingsData() {
   const session = await getSession();
   const { accessToken, isAuthenticated, user } = session;
@@ -49,7 +49,7 @@ export async function getSettingsData() {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': JSON_MEDIA_TYPE,
-      Accept: JSON_MEDIA_TYPE
+      Accept: JSON_MEDIA_TYPE,
     },
   });
 

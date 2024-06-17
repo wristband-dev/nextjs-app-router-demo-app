@@ -37,11 +37,7 @@ export function resolveTenantDomain(req: NextRequest, useTenantSubdomains: boole
   return tenantDomainParam || '';
 }
 
-export function createLoginState(
-  req: NextRequest,
-  redirectUri: string,
-  config: LoginStateMapConfig = {}
-): LoginState {
+export function createLoginState(req: NextRequest, redirectUri: string, config: LoginStateMapConfig = {}): LoginState {
   const returnUrl = req.nextUrl.searchParams.get('return_url');
 
   if (!!returnUrl && typeof returnUrl !== 'string') {
@@ -158,9 +154,12 @@ export function getLoginStateCookieName(req: NextRequest): string {
 
   // This should always resolve to a single cookie with this prefix, or possibly no cookie at all
   // if it got cleared or expired before the callback was triggered.
-  const matchingLoginCookieNames: string[] = req.cookies.getAll().filter((cookie) => {
-    return cookie.name.startsWith(`${LOGIN_STATE_COOKIE_PREFIX}${paramState}:`);
-  }).map((cookie) => cookie.name);
+  const matchingLoginCookieNames: string[] = req.cookies
+    .getAll()
+    .filter((cookie) => {
+      return cookie.name.startsWith(`${LOGIN_STATE_COOKIE_PREFIX}${paramState}:`);
+    })
+    .map((cookie) => cookie.name);
 
   if (matchingLoginCookieNames.length > 0) {
     return matchingLoginCookieNames[0];

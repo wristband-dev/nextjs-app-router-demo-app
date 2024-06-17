@@ -27,13 +27,12 @@ export const sessionOptions: SessionOptions = {
   },
 };
 
-export function legacyGetSession(
+export function middlewareGetSession(
   req: http.IncomingMessage | Request,
   res: http.ServerResponse | Response
 ): Promise<IronSession<SessionData>> {
   return getIronSession<SessionData>(req, res, sessionOptions);
 }
-
 
 export function getSession(): Promise<IronSession<SessionData>> {
   return getIronSession<SessionData>(cookies(), sessionOptions);

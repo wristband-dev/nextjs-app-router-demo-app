@@ -3,11 +3,11 @@
   "description": "Invotastic for Business is a multi-tenant demo app powered by Wristband. It is using NextJS with app routing.",
   "private": true,
   "scripts": {
-    "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 next dev -p 6001",
-    "dev-vanity-domain": "NODE_TLS_REJECT_UNAUTHORIZED=0 next dev -p 6001 -H business.invotastic.com",
-    "build": "NODE_TLS_REJECT_UNAUTHORIZED=0 next build",
-    "start": "NODE_TLS_REJECT_UNAUTHORIZED=0 next start -p 6001",
-    "start-vanity-domain": "NODE_TLS_REJECT_UNAUTHORIZED=0 next start -p 6001 -H business.invotastic.com",
+    "dev": "next dev -p 6001",
+    "dev-vanity-domain": "next dev -p 6001 -H business.invotastic.com",
+    "build": "next build",
+    "start": "next start -p 6001",
+    "start-vanity-domain": "next start -p 6001 -H business.invotastic.com",
     "lint": "next lint"
   },
   "dependencies": {
@@ -28,9 +28,15 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "autoprefixer": "^10.4.19",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
     "postcss": "^8",
+    "prettier": "^3.3.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

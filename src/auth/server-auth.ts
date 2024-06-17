@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { IncomingMessage } from 'http';
 
-import { CallbackData, CallbackResult, CallbackResultType, LoginConfig, LoginState, LogoutConfig, TokenResponse, Userinfo } from '@/types';
+import {
+  CallbackData,
+  CallbackResult,
+  CallbackResultType,
+  LoginConfig,
+  LoginState,
+  LogoutConfig,
+  TokenResponse,
+  Userinfo,
+} from '@/types';
 import * as authService from '@/services/auth-service';
 import {
   APPLICATION_LOGIN_URL,
@@ -46,7 +55,7 @@ export async function login(req: NextRequest, config: LoginConfig = {}): Promise
   tenantDomainName = resolveTenantDomain(req, !IS_LOCALHOST, INVOTASTIC_HOST);
   if (!tenantDomainName) {
     return NextResponse.redirect(APPLICATION_LOGIN_URL, { status: 302, headers: NO_CACHE_HEADERS });
-  };
+  }
 
   // Create the login state which will be cached in a cookie so that it can be accessed in the callback.
   const customState = !!config.customState && !!Object.keys(config.customState).length ? config.customState : undefined;
@@ -106,10 +115,10 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
     return { redirectUrl: tenantLoginUrl || appLoginUrl, result: CallbackResultType.REDIRECT_REQUIRED };
   }
 
-  const loginStateCookie = req.cookies.get(loginStateCookieName)?.value!;
+  const loginStateCookie = req.cookies.get(loginStateCookieName)?.value;
   cookies().delete(loginStateCookieName);
   console.log('COOKIE VALUE: ', loginStateCookie);
-  const loginState: LoginState = await decryptLoginState(loginStateCookie, LOGIN_STATE_COOKIE_SECRET);
+  const loginState: LoginState = await decryptLoginState(loginStateCookie!, LOGIN_STATE_COOKIE_SECRET);
   const { codeVerifier, customState, returnUrl, state: cookieState, tenantDomainName } = loginState;
 
   console.log('LOGIN STATE: ', loginState);
@@ -122,7 +131,10 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
   }
   if (!IS_LOCALHOST && tenantSubdomain !== tenantDomainName) {
     console.log('REDIRECT 02!!');
-    return { redirectUrl: `http://${tenantDomainName}.${INVOTASTIC_HOST}/api/auth/login`, result: CallbackResultType.REDIRECT_REQUIRED };
+    return {
+      redirectUrl: `http://${tenantDomainName}.${INVOTASTIC_HOST}/api/auth/login`,
+      result: CallbackResultType.REDIRECT_REQUIRED,
+    };
   }
 
   tenantLoginUrl = !IS_LOCALHOST
@@ -176,7 +188,7 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
   return { result: CallbackResultType.COMPLETED, callbackData };
 }
 
-export async function logout(req: NextRequest, res: NextResponse, config: LogoutConfig = {}): Promise<NextResponse> {
+export async function logout(req: NextRequest, config: LogoutConfig = {}): Promise<NextResponse> {
   const host = req.headers.get('host');
 
   // Revoke the refresh token only if present.

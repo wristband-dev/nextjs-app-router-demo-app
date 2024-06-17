@@ -11,9 +11,7 @@ export default async function SettingsPage() {
       </div>
 
       <div className="my-8 mx-auto">
-        <h2 className="mb-4 font-bold">
-          Server Component/Action
-        </h2>
+        <h2 className="mb-4 font-bold">Server Component/Action</h2>
         <pre className="text-left">{JSON.stringify(data, null, 2)}</pre>
       </div>
     </section>

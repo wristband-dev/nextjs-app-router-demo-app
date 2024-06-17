@@ -1,5 +1,3 @@
-import { NextResponse } from 'next/server';
-
 /**
  * Represents the configuration for login.
  * @typedef {Object} LoginConfig
@@ -51,7 +49,7 @@ export enum CallbackResultType {
    * Indicates that a redirect is required, generally to a login route or page.
    */
   REDIRECT_REQUIRED = 'REDIRECT_REQUIRED',
-};
+}
 
 /**
  * Represents the result of the callback execution after authentication. It can be the set of callback

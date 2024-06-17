@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { legacyGetSession } from '@/session/iron-session';
+import { middlewareGetSession } from '@/session/iron-session';
 import { refreshTokenIfExpired } from '@/auth/middleware-auth';
 import { HTTP_401_STATUS, UNAUTHORIZED } from '@/utils/constants';
 
@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
   const isProtectedPage: boolean = pathname === '/settings';
   const isProtectedApiRoute: boolean = pathname.startsWith('/api/v1');
 
-  const session = await legacyGetSession(req, res);
+  const session = await middlewareGetSession(req, res);
   const { expiresAt, isAuthenticated, refreshToken } = session;
   console.log('MIDDLEWARE IS_AUTH: ', isAuthenticated, pathname);
 

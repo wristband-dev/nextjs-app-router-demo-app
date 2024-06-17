@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { getSession } from '@/session/iron-session';
 
 const HTTP_401_STATUS = { status: 401 };
 const UNAUTHORIZED = { statusText: 'Unauthorized' };
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getSession();
-  const { isAuthenticated, tenantDomainName, user } = session;
+  const { isAuthenticated, tenantDomainName } = session;
   console.log('HELLO WORLD: ', isAuthenticated, tenantDomainName);
 
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
