@@ -1,5 +1,5 @@
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { IncomingMessage } from 'http';
 
 import {
   CallbackData,
@@ -32,22 +32,10 @@ import {
   resolveTenantDomain,
 } from '@/utils/helpers';
 import { WristbandError } from '@/error';
-import { cookies } from 'next/headers';
 
 /* ****************/
 /* SDK CANDIDATES */
 /* ****************/
-
-export function serverRedirectToLogin(req: IncomingMessage) {
-  const { headers, url } = req;
-  const returnUrl = `http://${headers.host}${url}`;
-  return {
-    redirect: {
-      destination: `http://${headers.host}/api/auth/login?return_url=${returnUrl}`,
-      permanent: false,
-    },
-  };
-}
 
 export async function login(req: NextRequest, config: LoginConfig = {}): Promise<NextResponse> {
   // Make sure a valid tenantDomainName exists for multi-tenant apps.
