@@ -152,7 +152,7 @@ API calls made from React to the NextJS server pass along the application sessio
 - "Touching" the application session cookie
 
 > [!WARNING]
-> Due to limitations with NextJS middleware around Node runtimes as well as accessing cookies, middleware is currently not utilized in this demo app.
+> The NextJS middleware is the only place where token refreshing occurs.
 
 It is also important to note that Wristband hosts all onboarding workflow pages (signup, login, etc), and NextJS will redirect to Wristband in order to show users those pages.
 
