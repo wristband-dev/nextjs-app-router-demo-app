@@ -1,7 +1,13 @@
 {
   "name": "b2b-nextjs-app-router-demo-app",
   "description": "Invotastic for Business is a multi-tenant demo app powered by Wristband. It is using NextJS with app routing.",
+  "author": "Wristband",
+  "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18.12.1",
+    "npm": ">=8.19.2"
+  },
   "scripts": {
     "dev": "next dev -p 6001",
     "dev-vanity-domain": "next dev -p 6001 -H business.invotastic.com",
@@ -21,6 +27,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
+    "sharp": "^0.33.4",
     "uncrypto": "^0.1.3"
   },
   "devDependencies": {
