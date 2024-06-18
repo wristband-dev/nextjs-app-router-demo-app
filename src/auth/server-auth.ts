@@ -95,7 +95,6 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
 
   // Make sure the login state cookie exists, extract it, and set it to be cleared by the server.
   const loginStateCookie: string = getAndClearLoginStateCookie(req);
-  console.log('COOKIE VALUE: ', loginStateCookie);
   if (!loginStateCookie) {
     console.warn(`Login state cookie not found. Redirecting to login.`);
     return { redirectUrl: tenantLoginUrl || appLoginUrl, result: CallbackResultType.REDIRECT_REQUIRED };
@@ -104,15 +103,11 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
   const loginState: LoginState = await decryptLoginState(loginStateCookie!, LOGIN_STATE_COOKIE_SECRET);
   const { codeVerifier, customState, returnUrl, state: cookieState, tenantDomainName } = loginState;
 
-  console.log('LOGIN STATE: ', loginState);
-
   // Ensure there is a proper tenantDomain
   if (IS_LOCALHOST && !tenantDomainName) {
-    console.log('REDIRECT 01!!');
     return { redirectUrl: appLoginUrl, result: CallbackResultType.REDIRECT_REQUIRED };
   }
   if (!IS_LOCALHOST && tenantSubdomain !== tenantDomainName) {
-    console.log('REDIRECT 02!!');
     return {
       redirectUrl: `http://${tenantDomainName}.${INVOTASTIC_HOST}/api/auth/login`,
       result: CallbackResultType.REDIRECT_REQUIRED,
@@ -125,12 +120,10 @@ export async function callback(req: NextRequest): Promise<CallbackResult> {
 
   // Check for any potential error conditions
   if (paramState !== cookieState) {
-    console.log('REDIRECT 03!!');
     return { redirectUrl: tenantLoginUrl, result: CallbackResultType.REDIRECT_REQUIRED };
   }
   if (error) {
     if (error.toLowerCase() === LOGIN_REQUIRED_ERROR) {
-      console.log('REDIRECT 04!!');
       return { redirectUrl: tenantLoginUrl, result: CallbackResultType.REDIRECT_REQUIRED };
     }
     throw new WristbandError(error, errorDescription || '');

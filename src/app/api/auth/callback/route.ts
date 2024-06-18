@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
   const { callbackData, redirectUrl, result } = callbackResult;
 
   if (result === CallbackResultType.REDIRECT_REQUIRED) {
-    console.log('REDIRECT RESULT');
     return NextResponse.redirect(redirectUrl!, { status: 302, headers: NO_CACHE_HEADERS });
   }
 

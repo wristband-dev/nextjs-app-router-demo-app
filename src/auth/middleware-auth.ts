@@ -36,7 +36,7 @@ export async function refreshTokenIfExpired(refreshToken: string, expiresAt: num
     throw new TypeError('The expiresAt field must be an integer greater than 0');
   }
 
-  if (Date.now().valueOf() > expiresAt) {
+  if (Date.now().valueOf() <= expiresAt) {
     return null;
   }
 
