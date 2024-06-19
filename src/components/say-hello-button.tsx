@@ -1,9 +1,18 @@
 'use client';
 
+import { clientRedirectTologin } from '@/auth/client-auth';
+
 const FetchButton: React.FC = () => {
   const sayHello = async () => {
     try {
       const res = await fetch('/api/v1/hello');
+
+      /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
+      if (res.status === 401) {
+        clientRedirectTologin(window.location.href);
+        return;
+      }
+
       const data = await res.json();
       alert(data.message);
     } catch (error: unknown) {
