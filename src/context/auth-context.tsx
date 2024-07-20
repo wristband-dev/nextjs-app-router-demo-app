@@ -2,8 +2,8 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 
-import { clientRedirectTologin, clientRedirectToLogout } from '@/auth/client-auth';
-import { User } from '@/types';
+import { clientRedirectTologin, clientRedirectToLogout } from '@/utils/helpers';
+import { User } from '@/types/wristband-types';
 
 type State = { isAuthenticated: boolean; user: User | null; tenantDomainName: string | null };
 const AuthContext = createContext<State>({ isAuthenticated: false, user: null, tenantDomainName: null });

@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { CallbackResult, CallbackResultType } from '@wristband/nextjs-auth';
 
 import { getSession } from '@/session/iron-session';
 import { parseUserinfo } from '@/utils/helpers';
 import { INVOTASTIC_HOST, IS_LOCALHOST, NO_CACHE_HEADERS } from '@/utils/constants';
-import { callback } from '@/auth/server-auth';
-import { CallbackResult, CallbackResultType } from '@/types';
+import { wristbandAuth } from '@/wristband-auth';
+import { Userinfo } from '@/types/wristband-types';
 
 export async function GET(req: NextRequest) {
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
   // After the user authenticates, exchange the incoming authorization code for JWTs and also retrieve userinfo.
-  const callbackResult: CallbackResult = await callback(req);
+  const callbackResult: CallbackResult = await wristbandAuth.appRouter.callback(req);
   const { callbackData, redirectUrl, result } = callbackResult;
 
   if (result === CallbackResultType.REDIRECT_REQUIRED) {
@@ -19,13 +20,12 @@ export async function GET(req: NextRequest) {
   const session = await getSession();
 
   // Save any necessary fields for the user's app session into a session cookie.
-  // const session = await getSession(req, redirectToAppResponse);
   session.isAuthenticated = true;
   session.accessToken = callbackData!.accessToken;
   // Convert the "expiresIn" seconds into an expiration date with the format of milliseconds from the epoch.
   session.expiresAt = Date.now() + callbackData!.expiresIn * 1000;
   session.refreshToken = callbackData!.refreshToken;
-  session.user = parseUserinfo(callbackData!.userinfo);
+  session.user = parseUserinfo(callbackData!.userinfo as Userinfo);
   session.tenantDomainName = callbackData!.tenantDomainName;
 
   await session.save();

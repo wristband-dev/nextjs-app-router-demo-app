@@ -1,6 +1,6 @@
 'use client';
 
-import { clientRedirectTologin } from '@/auth/client-auth';
+import { clientRedirectTologin } from '@/utils/helpers';
 
 const FetchButton: React.FC = () => {
   const sayHello = async () => {

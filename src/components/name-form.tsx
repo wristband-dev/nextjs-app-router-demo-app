@@ -3,7 +3,7 @@
 import { useFormState } from 'react-dom';
 
 import { sayName } from '@/app/lib/actions';
-import { clientRedirectTologin } from '@/auth/client-auth';
+import { clientRedirectTologin } from '@/utils/helpers';
 import { SayNameButton } from '@/components/say-name-button';
 
 export default function NameForm() {
