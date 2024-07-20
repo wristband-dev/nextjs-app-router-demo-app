@@ -2,7 +2,7 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 
-import { clientRedirectTologin, clientRedirectToLogout } from '@/utils/helpers';
+import { clientRedirectToLogin, clientRedirectToLogout } from '@/utils/helpers';
 import { User } from '@/types/wristband-types';
 
 type State = { isAuthenticated: boolean; user: User | null; tenantDomainName: string | null };
@@ -29,7 +29,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         const { isAuthenticated, user, tenantDomainName } = data;
         if (!isAuthenticated) {
           // We want to preserve the page route that the user lands on when they com back after re-authentication.
-          clientRedirectTologin(window.location.href);
+          clientRedirectToLogin(window.location.href);
           return;
         }
 

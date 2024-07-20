@@ -1,6 +1,6 @@
 'use client';
 
-import { clientRedirectTologin } from '@/utils/helpers';
+import { clientRedirectToLogin } from '@/utils/helpers';
 
 const FetchButton: React.FC = () => {
   const sayHello = async () => {
@@ -9,7 +9,7 @@ const FetchButton: React.FC = () => {
 
       /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
       if (res.status === 401) {
-        clientRedirectTologin(window.location.href);
+        clientRedirectToLogin(window.location.href);
         return;
       }
 

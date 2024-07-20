@@ -5,7 +5,7 @@ import { Userinfo } from '@/types/wristband-types';
  * of the application.
  */
 
-export function clientRedirectTologin(returnUrl?: string) {
+export function clientRedirectToLogin(returnUrl?: string) {
   if (!!window) {
     if (returnUrl) {
       const queryParams = new URLSearchParams({ return_url: encodeURI(returnUrl) }).toString();
