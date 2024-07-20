@@ -1,3 +1,5 @@
+'use server';
+
 import { getSettingsData } from '../lib/actions';
 
 // Server Component

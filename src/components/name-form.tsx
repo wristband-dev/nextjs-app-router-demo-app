@@ -3,7 +3,7 @@
 import { useFormState } from 'react-dom';
 
 import { sayName } from '@/app/lib/actions';
-import { clientRedirectTologin } from '@/auth/client-auth';
+import { clientRedirectToLogin } from '@/utils/helpers';
 import { SayNameButton } from '@/components/say-name-button';
 
 export default function NameForm() {
@@ -29,7 +29,7 @@ export default function NameForm() {
         <button
           type="button"
           className="shadow-md cursor-pointer bg-blue-500 text-white py-2 px-4 rounded hover:brightness-90 transition ease-in-out duration-200"
-          onClick={() => clientRedirectTologin()}
+          onClick={() => clientRedirectToLogin()}
         >
           Login
         </button>

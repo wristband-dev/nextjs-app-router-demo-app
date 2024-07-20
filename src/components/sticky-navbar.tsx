@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 
 import Logo from '../../public/invotastic-logo.png';
-import { clientRedirectToLogout } from '@/auth/client-auth';
+import { clientRedirectToLogout } from '@/utils/helpers';
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
