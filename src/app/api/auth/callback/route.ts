@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { CallbackResult, CallbackResultType } from '@wristband/nextjs-auth';
+import { NextRequest } from 'next/server';
+import { AppRouterCallbackResult, CallbackResultType } from '@wristband/nextjs-auth';
 
 import { getSession } from '@/session/iron-session';
 import { parseUserinfo } from '@/utils/helpers';
-import { INVOTASTIC_HOST, IS_LOCALHOST, NO_CACHE_HEADERS } from '@/utils/constants';
+import { INVOTASTIC_HOST, IS_LOCALHOST } from '@/utils/constants';
 import { wristbandAuth } from '@/wristband-auth';
 import { Userinfo } from '@/types/wristband-types';
 
 export async function GET(req: NextRequest) {
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
   // After the user authenticates, exchange the incoming authorization code for JWTs and also retrieve userinfo.
-  const callbackResult: CallbackResult = await wristbandAuth.appRouter.callback(req);
-  const { callbackData, redirectUrl, result } = callbackResult;
+  const callbackResult: AppRouterCallbackResult = await wristbandAuth.appRouter.callback(req);
+  const { callbackData, redirectResponse, result } = callbackResult;
 
   if (result === CallbackResultType.REDIRECT_REQUIRED) {
-    return NextResponse.redirect(redirectUrl!, { status: 302, headers: NO_CACHE_HEADERS });
+    return redirectResponse;
   }
 
   const session = await getSession();
@@ -27,11 +27,12 @@ export async function GET(req: NextRequest) {
   session.refreshToken = callbackData!.refreshToken;
   session.user = parseUserinfo(callbackData!.userinfo as Userinfo);
   session.tenantDomainName = callbackData!.tenantDomainName;
+  session.tenantCustomDomain = callbackData!.tenantCustomDomain || undefined;
 
   await session.save();
 
   // Send the user back to the Invotastic application.
   const tenantDomain = IS_LOCALHOST ? '' : `${callbackData!.tenantDomainName}.`;
   const appUrl = callbackData!.returnUrl || `http://${tenantDomain}${INVOTASTIC_HOST}`;
-  return NextResponse.redirect(appUrl, { status: 302, headers: NO_CACHE_HEADERS });
+  return wristbandAuth.appRouter.createCallbackResponse(appUrl);
 }
