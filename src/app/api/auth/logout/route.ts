@@ -7,12 +7,12 @@ import { wristbandAuth } from '@/wristband-auth';
 
 export async function GET(req: NextRequest) {
   const session = await getSession();
-  const { tenantDomainName, refreshToken } = session;
+  const { refreshToken, tenantCustomDomain, tenantDomainName } = session;
 
   // Always destroy session.
   cookies().delete(SESSION_COOKIE_NAME);
   session.destroy();
 
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
-  return await wristbandAuth.appRouter.logout(req, { tenantDomainName, refreshToken });
+  return await wristbandAuth.appRouter.logout(req, { refreshToken, tenantCustomDomain, tenantDomainName });
 }
