@@ -7,6 +7,7 @@ function bearerAuthFetchHeaders(accessToken: string) {
 
 export async function getTenant(accessToken: string, tenantId: string) {
   const res = await fetch(`https://${process.env.APPLICATION_DOMAIN}/api/v1/tenants/${tenantId}`, {
+    cache: 'no-store',
     method: 'GET',
     headers: bearerAuthFetchHeaders(accessToken),
     keepalive: true,

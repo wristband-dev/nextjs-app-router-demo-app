@@ -14,3 +14,7 @@ export const SESSION_COOKIE_NAME: string = 'session';
 export const SESSION_COOKIE_SECRET: string = '96bf13d5-b5c1-463a-812c-0d8db87c0ec5';
 export const TENANT_DOMAIN_TOKEN: string = '{tenant_domain}';
 export const UNAUTHORIZED = { statusText: 'Unauthorized' };
+
+// CSRF constants
+export const CSRF_TOKEN_COOKIE_NAME = 'XSRF-TOKEN';
+export const CSRF_TOKEN_HEADER_NAME = 'x-xsrf-token';
