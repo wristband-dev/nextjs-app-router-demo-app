@@ -1,8 +1,9 @@
 'use server';
 
-import { getSession } from '@/session/iron-session';
-import { JSON_MEDIA_TYPE } from '@/utils/constants';
 import { redirect } from 'next/navigation';
+
+import { getTenant } from '@/services/wristband-service';
+import { getSession } from '@/session/iron-session';
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -43,20 +44,11 @@ export async function getSettingsData() {
     redirectToLoginApiRoute();
   }
 
-  const res = await fetch(`https://${process.env.APPLICATION_DOMAIN}/api/v1/tenants/${user.tenantId}`, {
-    cache: 'no-store',
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': JSON_MEDIA_TYPE,
-      Accept: JSON_MEDIA_TYPE,
-    },
-  });
-
-  if (res.status !== 200) {
+  try {
+    const tenant = await getTenant(accessToken, user.tenantId);
+    return tenant;
+  } catch (error) {
+    console.error(error);
     redirectToLoginApiRoute();
   }
-
-  const data = await res.json();
-  return data;
 }

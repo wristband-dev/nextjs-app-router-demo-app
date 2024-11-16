@@ -6,6 +6,7 @@ import { parseUserinfo } from '@/utils/helpers';
 import { INVOTASTIC_HOST, IS_LOCALHOST } from '@/utils/constants';
 import { wristbandAuth } from '@/wristband-auth';
 import { Userinfo } from '@/types/wristband-types';
+import { createCsrfSecret, setCsrfTokenCookie } from '@/utils/csrf';
 
 export async function GET(req: NextRequest) {
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
@@ -29,10 +30,19 @@ export async function GET(req: NextRequest) {
   session.tenantDomainName = callbackData!.tenantDomainName;
   session.tenantCustomDomain = callbackData!.tenantCustomDomain || undefined;
 
+  // Create the response that will send the user back to the Invotastic application.
+  const tenantDomain = IS_LOCALHOST ? '' : `${callbackData!.tenantDomainName}.`;
+  const appUrl = callbackData!.returnUrl || `http://${tenantDomain}${INVOTASTIC_HOST}`;
+  const callbackResponse = wristbandAuth.appRouter.createCallbackResponse(appUrl);
+
+  // Establish CSRF secret and cookie.
+  const csrfSecret = createCsrfSecret();
+  session.csrfSecret = csrfSecret;
+  await setCsrfTokenCookie(csrfSecret, callbackResponse);
+
+  // Save all fields into the session
   await session.save();
 
   // Send the user back to the Invotastic application.
-  const tenantDomain = IS_LOCALHOST ? '' : `${callbackData!.tenantDomainName}.`;
-  const appUrl = callbackData!.returnUrl || `http://${tenantDomain}${INVOTASTIC_HOST}`;
-  return wristbandAuth.appRouter.createCallbackResponse(appUrl);
+  return callbackResponse;
 }

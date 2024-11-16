@@ -1,22 +1,23 @@
 'use client';
 
-import { clientRedirectToLogin } from '@/utils/helpers';
+import frontendApiService from '@/services/frontend-api-service';
+import { clientRedirectToLogin, isUnauthorizedError } from '@/utils/helpers';
 
 const FetchButton: React.FC = () => {
   const sayHello = async () => {
     try {
-      const res = await fetch('/api/v1/hello');
+      const data = await frontendApiService.sayHello();
+      alert(data.message);
+    } catch (error: unknown) {
+      console.error(error);
 
       /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
-      if (res.status === 401) {
+      if (isUnauthorizedError(error)) {
         clientRedirectToLogin(window.location.href);
         return;
       }
 
-      const data = await res.json();
-      alert(data.message);
-    } catch (error: unknown) {
-      console.log(error);
+      alert(error);
     }
   };
 
