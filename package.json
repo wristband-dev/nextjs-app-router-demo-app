@@ -9,7 +9,7 @@
     "npm": ">=8.19.2"
   },
   "scripts": {
-    "dev": "next dev -p 6001",
+    "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 next dev -p 6001",
     "dev-vanity-domain": "next dev -p 6001 -H business.invotastic.com",
     "build": "next build",
     "start": "next start -p 6001",
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@edge-csrf/core": "^2.5.2",
-    "@wristband/nextjs-auth": "^1.0.0-rc2",
+    "@wristband/nextjs-auth": "^1.0.0-rc5",
     "axios": "^1.7.7",
     "iron-session": "^8.0.4",
     "next": "^14.2.17",
