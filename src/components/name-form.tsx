@@ -1,15 +1,13 @@
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 
 import { sayName } from '@/app/lib/actions';
 import { clientRedirectToLogin } from '@/utils/helpers';
 import { SayNameButton } from '@/components/say-name-button';
 
 export default function NameForm() {
-  // https://github.com/vercel/next.js/issues/65673#issuecomment-2115022037
-  // useActionState is still in canary release at the time of writing this code, so using useFormState instead.
-  const [state, formAction] = useFormState(sayName, { message: 'Please say your name...', authError: false });
+  const [state, formAction] = useActionState(sayName, { message: 'Please say your name...', authError: false });
 
   return (
     <form action={formAction} className="bg-white p-8 rounded shadow-md w-full max-w-md">

@@ -1,5 +1,4 @@
 import { getIronSession, IronSession, SessionOptions } from 'iron-session';
-import * as http from 'http';
 
 import { SESSION_COOKIE_NAME, SESSION_COOKIE_SECRET } from '@/utils/constants';
 import { User } from '@/types/wristband-types';
@@ -29,13 +28,11 @@ const sessionOptions: SessionOptions = {
   },
 };
 
-export function middlewareGetSession(
-  req: http.IncomingMessage | Request,
-  res: http.ServerResponse | Response
-): Promise<IronSession<SessionData>> {
-  return getIronSession<SessionData>(req, res, sessionOptions);
+export async function middlewareGetSession(req: Request, res: Response): Promise<IronSession<SessionData>> {
+  return await getIronSession<SessionData>(req, res, sessionOptions);
 }
 
-export function getSession(): Promise<IronSession<SessionData>> {
-  return getIronSession<SessionData>(cookies(), sessionOptions);
+export async function getSession(): Promise<IronSession<SessionData>> {
+  const cookieStore = await cookies();
+  return await getIronSession<SessionData>(cookieStore, sessionOptions);
 }

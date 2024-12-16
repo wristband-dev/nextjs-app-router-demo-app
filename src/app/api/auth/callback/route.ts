@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
   // Create the response that will send the user back to the Invotastic application.
   const tenantDomain = IS_LOCALHOST ? '' : `${callbackData!.tenantDomainName}.`;
   const appUrl = callbackData!.returnUrl || `http://${tenantDomain}${INVOTASTIC_HOST}`;
-  const callbackResponse = wristbandAuth.appRouter.createCallbackResponse(appUrl);
+  const callbackResponse = await wristbandAuth.appRouter.createCallbackResponse(req, appUrl);
 
   // Establish CSRF secret and cookie.
   const csrfSecret = createCsrfSecret();
