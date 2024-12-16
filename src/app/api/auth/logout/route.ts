@@ -10,8 +10,9 @@ export async function GET(req: NextRequest) {
   const { refreshToken, tenantCustomDomain, tenantDomainName } = session;
 
   // Always destroy session and CSRF cookies.
-  cookies().delete(SESSION_COOKIE_NAME);
-  cookies().delete(CSRF_TOKEN_COOKIE_NAME);
+  const cookieStore = await cookies();
+  cookieStore.delete(SESSION_COOKIE_NAME);
+  cookieStore.delete(CSRF_TOKEN_COOKIE_NAME);
   session.destroy();
 
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
