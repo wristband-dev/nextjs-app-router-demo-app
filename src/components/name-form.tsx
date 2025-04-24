@@ -1,9 +1,9 @@
 'use client';
 
 import { useActionState } from 'react';
+import { redirectToLogin } from '@wristband/react-client-auth';
 
 import { sayName } from '@/app/lib/actions';
-import { clientRedirectToLogin } from '@/utils/helpers';
 import { SayNameButton } from '@/components/say-name-button';
 
 export default function NameForm() {
@@ -24,10 +24,11 @@ export default function NameForm() {
         </>
       )}
       {state.authError && (
+        /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
         <button
           type="button"
           className="shadow-md cursor-pointer bg-blue-500 text-white py-2 px-4 rounded hover:brightness-90 transition ease-in-out duration-200"
-          onClick={() => clientRedirectToLogin()}
+          onClick={() => redirectToLogin('/api/auth/login')}
         >
           Login
         </button>

@@ -1,7 +1,9 @@
 'use client';
 
+import { redirectToLogin } from '@wristband/react-client-auth';
+
 import frontendApiService from '@/services/frontend-api-service';
-import { clientRedirectToLogin, isUnauthorizedError } from '@/utils/helpers';
+import { isUnauthorizedError } from '@/utils/helpers';
 
 const FetchButton: React.FC = () => {
   const sayHello = async () => {
@@ -13,7 +15,7 @@ const FetchButton: React.FC = () => {
 
       /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
       if (isUnauthorizedError(error)) {
-        clientRedirectToLogin(window.location.href);
+        redirectToLogin('/api/auth/login', { returnUrl: window.location.href });
         return;
       }
 
