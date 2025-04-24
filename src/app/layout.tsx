@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import './globals.css';
+
 import { Navbar } from '@/components/sticky-navbar';
-import { AuthProvider } from '@/context/auth-context';
+import { WristbandAuthProviderWrapper } from '@/context/wristband-auth-provider-wrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,10 +18,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-[100vh]`}>
-        <AuthProvider>
+        {/* WRISTBAND_TOUCHPOINT - AUTHENTICATION */}
+        <WristbandAuthProviderWrapper>
           <Navbar />
           <main className="min-h-[100vh] p-8 pt-24 pb-8">{children}</main>
-        </AuthProvider>
+        </WristbandAuthProviderWrapper>
       </body>
     </html>
   );

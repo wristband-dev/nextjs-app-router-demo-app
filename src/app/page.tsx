@@ -1,13 +1,17 @@
 'use client';
 
 import { FaExclamationTriangle } from 'react-icons/fa';
+import { useWristbandAuth, useWristbandSession } from '@wristband/react-client-auth';
 
 import NameForm from '@/components/name-form';
 import FetchButton from '@/components/say-hello-button';
-import { useAuth } from '@/context/auth-context';
+import { MySessionMetadata } from '@/types/wristband-types';
 
 export default function Home() {
-  const { isAuthenticated } = useAuth();
+  /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
+  const { isAuthenticated } = useWristbandAuth();
+  const { metadata } = useWristbandSession<MySessionMetadata>();
+  const { email } = metadata;
 
   return (
     <section className="flex flex-col justify-center text-center">
@@ -25,6 +29,9 @@ export default function Home() {
       {!isAuthenticated && <h3>Loading...</h3>}
       {isAuthenticated && (
         <>
+          <div className="my-4 mx-auto">
+            <h2 className="font-bold">{`Logged In As: "${email}"`}</h2>
+          </div>
           <div className="my-8 mx-auto">
             <h2 className="mb-4 font-bold">Client-side API Route Call</h2>
             <FetchButton />

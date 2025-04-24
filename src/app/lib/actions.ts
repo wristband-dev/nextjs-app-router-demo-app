@@ -9,7 +9,7 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function redirectToLoginApiRoute() {
+function serverSideRedirectToLogin() {
   // https://github.com/vercel/next.js/issues/53813
   // There's a bug where redirects inside of server components/actions will show an error in the browser developer
   // console, even though the redirect does succeed.
@@ -41,7 +41,7 @@ export async function getSettingsData() {
   // NOTE: If you are doing auth checks in your middleware, then you usually don't need to do any auth check here.
   // This is here merely for demo purposes.
   if (!isAuthenticated) {
-    redirectToLoginApiRoute();
+    serverSideRedirectToLogin();
   }
 
   try {
@@ -49,6 +49,6 @@ export async function getSettingsData() {
     return tenant;
   } catch (error) {
     console.error(error);
-    redirectToLoginApiRoute();
+    serverSideRedirectToLogin();
   }
 }

@@ -4,9 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+import { redirectToLogout } from '@wristband/react-client-auth';
 
 import Logo from '../../public/invotastic-logo.png';
-import { clientRedirectToLogout } from '@/utils/helpers';
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -32,7 +32,8 @@ export function Navbar() {
                 Settings
               </li>
             </Link>
-            <div onClick={clientRedirectToLogout} className="cursor-pointer">
+            {/* WRISTBAND_TOUCHPOINT - AUTHENTICATION */}
+            <div onClick={() => redirectToLogout('/api/auth/logout')} className="cursor-pointer">
               <li className="ml-8 capitalize border-b-2 border-transparent hover:border-white transition ease-in-out duration-200 text-xl">
                 Log Out
               </li>
@@ -67,7 +68,8 @@ export function Navbar() {
                 Settings
               </li>
             </Link>
-            <div onClick={clientRedirectToLogout} className="cursor-pointer">
+            {/* WRISTBAND_TOUCHPOINT - AUTHENTICATION */}
+            <div onClick={() => redirectToLogout('/api/auth/logout')} className="cursor-pointer">
               <li onClick={() => setMenuOpen(false)} className="py-4 cursor-pointer">
                 Log Out
               </li>
