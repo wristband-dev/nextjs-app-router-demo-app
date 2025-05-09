@@ -23,12 +23,9 @@
 
 # Wristband Multi-Tenant Demo App for NextJS (App Router)
 
-"Invotastic for Business" is a multi-tenant demo app that serves other companies as its customers. This repo utilizes a "Backend Server" OAuth2 client type. The backend server technology here is NextJS, and the router type is the App Router. It demonstrates both how to protect API routes as well as getServerSideProps() function.
+This is a multi-tenant demo app that serves other companies as its customers. This repo utilizes a "Backend Server" OAuth2 client type. The backend server technology here is NextJS, and the router type is the App Router. It demonstrates both how to protect API routes as well as getServerSideProps() function.
 <br>
 <br>
-
-**Disclaimer:**
-Invotastic for Business is not a real-world application and cannot be used to send invoices to real people.
 
 <br>
 <hr />
@@ -148,7 +145,7 @@ It is also important to note that Wristband hosts all onboarding workflow pages 
 Within the demo app code base, you can search in your IDE of choice for the text `WRISTBAND_TOUCHPOINT`.  This will show the various places in both the React frontend code and NextJS server code where Wristband is involved.  You will find the search results return one of a few possible comments using that search text:
 
 - `/* WRISTBAND_TOUCHPOINT - AUTHENTICATION */` - Code that deals with an authenticated user's application session.  This includes managing their application session cookie and JWTs, OAuth2-related endpoints for login/callback/logout, API routes and SSR pages for validating/refreshing tokens, and React context used to check the user's authenticated session.
-- `/* WRISTBAND_TOUCHPOINT - AUTHORIZATION */` - Code that checks whether a user has the required permissions to interact with Invotastic-specific resource APIs or can access certain application functionality in the UI.
+- `/* WRISTBAND_TOUCHPOINT - AUTHORIZATION */` - Code that checks whether a user has the required permissions to interact with demo-specific resource APIs or can access certain application functionality in the UI.
 - `/* WRISTBAND_TOUCHPOINT - RESOURCE API */` - Code that interacts with any Wristband-specific resource APIs or workflow APIs that are not related to authentication or authorization directly.  For example, it could be an API call to update the user's profile or change their password.
 
 <br>
