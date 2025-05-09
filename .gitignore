@@ -34,3 +34,6 @@ next-env.d.ts
 
 # IDE
 .vscode
+
+# Env Vars Config
+.env

@@ -3,7 +3,7 @@ import { AppRouterCallbackResult, CallbackResultType } from '@wristband/nextjs-a
 
 import { getSession } from '@/session/iron-session';
 import { parseUserinfo } from '@/utils/helpers';
-import { INVOTASTIC_HOST, IS_LOCALHOST } from '@/utils/constants';
+import { INVOTASTIC_HOST } from '@/utils/constants';
 import { wristbandAuth } from '@/wristband-auth';
 import { Userinfo } from '@/types/wristband-types';
 import { createCsrfSecret, setCsrfTokenCookie } from '@/utils/csrf';
@@ -31,8 +31,7 @@ export async function GET(req: NextRequest) {
   session.tenantCustomDomain = callbackData!.tenantCustomDomain || undefined;
 
   // Create the response that will send the user back to the Invotastic application.
-  const tenantDomain = IS_LOCALHOST ? '' : `${callbackData!.tenantDomainName}.`;
-  const appUrl = callbackData!.returnUrl || `http://${tenantDomain}${INVOTASTIC_HOST}`;
+  const appUrl = callbackData!.returnUrl || `http://${INVOTASTIC_HOST}`;
   const callbackResponse = await wristbandAuth.appRouter.createCallbackResponse(req, appUrl);
 
   // Establish CSRF secret and cookie.
