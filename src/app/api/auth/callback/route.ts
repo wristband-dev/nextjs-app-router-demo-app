@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { AppRouterCallbackResult, CallbackResultType } from '@wristband/nextjs-auth';
+import { CallbackResult, CallbackResultType } from '@wristband/nextjs-auth';
 
 import { getSession } from '@/session/iron-session';
 import { parseUserinfo } from '@/utils/helpers';
@@ -11,11 +11,11 @@ import { createCsrfSecret, setCsrfTokenCookie } from '@/utils/csrf';
 export async function GET(req: NextRequest) {
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
   // After the user authenticates, exchange the incoming authorization code for JWTs and also retrieve userinfo.
-  const callbackResult: AppRouterCallbackResult = await wristbandAuth.appRouter.callback(req);
-  const { callbackData, redirectResponse, result } = callbackResult;
+  const callbackResult: CallbackResult = await wristbandAuth.appRouter.callback(req);
+  const { callbackData, redirectUrl, type } = callbackResult;
 
-  if (result === CallbackResultType.REDIRECT_REQUIRED) {
-    return redirectResponse;
+  if (type === CallbackResultType.REDIRECT_REQUIRED) {
+    return await wristbandAuth.appRouter.createCallbackResponse(req, redirectUrl!);
   }
 
   const session = await getSession();
