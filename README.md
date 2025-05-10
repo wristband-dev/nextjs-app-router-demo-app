@@ -129,14 +129,10 @@ The NextJS server is responsible for:
 - Orchestrating all API calls from the React frontend to both Wristband and the backend data store.
 - Destroying the application session cookie and revoking the refresh token when a user logs out.
 
-API calls made from React to the NextJS server pass along the application session cookie with every request.  The NextJS server peforms the following actions on all API route handlers and getServerSideProps() function calls:
+API calls made from React to the NextJS server pass along the application session cookie with every request.  The NextJS middleware peforms the following actions on all protected page and API routes:
 
-- Ensuring the user's authenticated session is still there
-- Validating and refreshing the access token (if necessary)
-- "Touching" the application session cookie
-
-> [!WARNING]
-> The NextJS middleware is the only place where token refreshing occurs.
+- Validating the session and refreshing the access token (if necessary)
+- Validating the CSRF token
 
 It is also important to note that Wristband hosts all onboarding workflow pages (signup, login, etc), and NextJS will redirect to Wristband in order to show users those pages.
 
@@ -159,6 +155,17 @@ This demo app is leveraging the [Wristband nextjs-auth SDK](https://github.com/w
 ## Wristband React Client Auth SDK
 
 This demo app is leveraging the [Wristband react-client-auth SDK](https://github.com/wristband-dev/react-client-auth) for any authenticated session interaction in the React frontend. Refer to that GitHub repository for more information.
+
+<br/>
+
+## CSRF Protection
+
+Cross-Site Request Forgery (CSRF) is a security vulnerability where attackers exploit a user's authenticated session to perform unauthorized actions on a web application without their knowledge or consent. This demo app is leveraging a technique called the Double Cookie Submit Pattern to mitigate CSRF attacks by employing two cookies: a session cookie for user authentication and a CSRF token cookie containing a unique token. With each request, the CSRF token is included both in the cookie and the request payload, enabling server-side validation to prevent CSRF attacks.
+
+Refer to the [OWASP CSRF Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) for more information about this topic.
+
+> [!WARNING]
+> Your own application should take effort to mitigate CSRF attacks in addition to any Wristband authentication, and it is highly recommended to take a similar approach as this demo app to protect against thse types of attacks.
 
 <br/>
 
