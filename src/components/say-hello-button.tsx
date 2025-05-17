@@ -3,7 +3,7 @@
 import { redirectToLogin } from '@wristband/react-client-auth';
 
 import frontendApiService from '@/services/frontend-api-service';
-import { isUnauthorizedError } from '@/utils/helpers';
+import { isForbiddenError, isUnauthorizedError } from '@/utils/helpers';
 
 const FetchButton: React.FC = () => {
   const sayHello = async () => {
@@ -14,7 +14,7 @@ const FetchButton: React.FC = () => {
       console.error(error);
 
       /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
-      if (isUnauthorizedError(error)) {
+      if (isUnauthorizedError(error) || isForbiddenError(error)) {
         redirectToLogin('/api/auth/login', { returnUrl: window.location.href });
         return;
       }
