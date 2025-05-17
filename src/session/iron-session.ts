@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 
 type SessionData = {
   accessToken: string;
-  csrfSecret: string;
+  csrfToken: string;
   expiresAt: number;
   isAuthenticated: boolean;
   refreshToken?: string;

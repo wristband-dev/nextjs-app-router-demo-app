@@ -6,7 +6,7 @@ import { parseUserinfo } from '@/utils/helpers';
 import { INVOTASTIC_HOST } from '@/utils/constants';
 import { wristbandAuth } from '@/wristband-auth';
 import { Userinfo } from '@/types/wristband-types';
-import { createCsrfSecret, setCsrfTokenCookie } from '@/utils/csrf';
+import { createCsrfToken, updateCsrfCookie } from '@/utils/csrf';
 
 export async function GET(req: NextRequest) {
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
@@ -35,9 +35,9 @@ export async function GET(req: NextRequest) {
   const callbackResponse = await wristbandAuth.appRouter.createCallbackResponse(req, appUrl);
 
   // Establish CSRF secret and cookie.
-  const csrfSecret = createCsrfSecret();
-  session.csrfSecret = csrfSecret;
-  await setCsrfTokenCookie(csrfSecret, callbackResponse);
+  const csrfToken = createCsrfToken();
+  session.csrfToken = csrfToken;
+  await updateCsrfCookie(csrfToken, callbackResponse);
 
   // Save all fields into the session
   await session.save();
