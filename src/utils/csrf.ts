@@ -11,6 +11,6 @@ export function createCsrfToken(): string {
 }
 
 export async function updateCsrfCookie(csrfToken: string, res: NextResponse) {
-  const cookieValue = `${CSRF_TOKEN_COOKIE_NAME}=${csrfToken}; Path=/; SameSite=Strict; Max-Age=1800`;
+  const cookieValue = `${CSRF_TOKEN_COOKIE_NAME}=${csrfToken}; Path=/; SameSite=Strict; Max-Age=1800; Secure`;
   res.headers.append('Set-Cookie', cookieValue);
 }

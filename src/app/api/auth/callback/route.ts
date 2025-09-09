@@ -3,7 +3,7 @@ import { CallbackResult, CallbackResultType } from '@wristband/nextjs-auth';
 
 import { getSession } from '@/session/iron-session';
 import { parseUserinfo } from '@/utils/helpers';
-import { INVOTASTIC_HOST } from '@/utils/constants';
+import { APP_HOME_URL } from '@/utils/constants';
 import { wristbandAuth } from '@/wristband-auth';
 import { Userinfo } from '@/types/wristband-types';
 import { createCsrfToken, updateCsrfCookie } from '@/utils/csrf';
@@ -23,15 +23,14 @@ export async function GET(req: NextRequest) {
   // Save any necessary fields for the user's app session into a session cookie.
   session.isAuthenticated = true;
   session.accessToken = callbackData!.accessToken;
-  // Convert the "expiresIn" seconds into an expiration date with the format of milliseconds from the epoch.
-  session.expiresAt = Date.now() + callbackData!.expiresIn * 1000;
+  session.expiresAt = callbackData!.expiresAt;
   session.refreshToken = callbackData!.refreshToken;
   session.user = parseUserinfo(callbackData!.userinfo as Userinfo);
   session.tenantDomainName = callbackData!.tenantDomainName;
   session.tenantCustomDomain = callbackData!.tenantCustomDomain || undefined;
 
-  // Create the response that will send the user back to the Invotastic application.
-  const appUrl = callbackData!.returnUrl || `http://${INVOTASTIC_HOST}`;
+  // Create the response that will send the user back to the application.
+  const appUrl = callbackData!.returnUrl || APP_HOME_URL;
   const callbackResponse = await wristbandAuth.appRouter.createCallbackResponse(req, appUrl);
 
   // Establish CSRF secret and cookie.
@@ -42,6 +41,6 @@ export async function GET(req: NextRequest) {
   // Save all fields into the session
   await session.save();
 
-  // Send the user back to the Invotastic application.
+  // Send the user back to the application.
   return callbackResponse;
 }
