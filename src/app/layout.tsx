@@ -9,8 +9,8 @@ import { WristbandAuthProviderWrapper } from '@/context/wristband-auth-provider-
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Invotastic',
-  description: 'B2B Invoicing Software',
+  title: 'Wristband Demo App',
+  description: 'Wristband Demo App',
   icons: { icon: '/favicon.ico' },
 };
 

@@ -12,11 +12,7 @@ interface Props {
 export function WristbandAuthProviderWrapper({ children }: Props) {
   return (
     /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
-    <WristbandAuthProvider<MySessionMetadata>
-      loginUrl="/api/auth/login"
-      logoutUrl="/api/auth/logout"
-      sessionUrl="/api/v1/session"
-    >
+    <WristbandAuthProvider<MySessionMetadata> loginUrl="/api/auth/login" sessionUrl="/api/v1/session">
       {children}
     </WristbandAuthProvider>
   );
