@@ -1,46 +1,48 @@
 'use client';
 
-import { FaExclamationTriangle } from 'react-icons/fa';
-import { useWristbandAuth, useWristbandSession } from '@wristband/react-client-auth';
+import { useState } from 'react';
+import { useWristbandAuth } from '@wristband/react-client-auth';
 
-import NameForm from '@/components/name-form';
-import FetchButton from '@/components/say-hello-button';
-import { MySessionMetadata } from '@/types/wristband-types';
+import { CookieTestForm, TabSelectorButton, TokenTestForm } from '@/components';
 
-export default function Home() {
+export default function ClientComponentPage() {
+  const [activeTab, setActiveTab] = useState<'cookie' | 'token'>('cookie');
+
   /* WRISTBAND_TOUCHPOINT - AUTHENTICATION */
   const { isAuthenticated } = useWristbandAuth();
-  const { metadata } = useWristbandSession<MySessionMetadata>();
-  const { email } = metadata;
 
   return (
     <section className="flex flex-col justify-center text-center">
-      <div className="my-0 mx-auto">
-        <h1 className="text-3xl font-bold underline">Home</h1>
+      <div className="mt-8 mb-4 mx-auto">
+        <h1 className="text-2xl font-bold underline">Client Components and API Routes</h1>
+        <p className="mt-8 mx-auto">
+          This Client Component page is protcted by the auth middleware/proxy before rendering. Once the page is
+          rendered, it relies on the useWristbandAuth() React hook to perform an auth check before displaying the forms
+          below.
+        </p>
       </div>
 
-      <div className="p-4 my-4">
-        <div className="flex items-center bg-yellow-300 bg-opacity-60 rounded-lg p-4 shadow-md w-full max-w-[600px] mx-auto font-medium">
-          <FaExclamationTriangle className="text-2xl mr-4 min-w-[32px]" color="black" />
-          <p className="text-lg text-left">We aim to add more functionality to this demo in the future.</p>
-        </div>
-      </div>
-
-      {!isAuthenticated && <h3>Loading...</h3>}
+      {!isAuthenticated && <h2>Loading...</h2>}
       {isAuthenticated && (
-        <>
-          <div className="my-4 mx-auto">
-            <h2 className="font-bold">{`Logged In As: "${email}"`}</h2>
+        <div className="flex flex-col gap-2 w-full">
+          <hr className="my-2" />
+          <div className="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+            <TabSelectorButton
+              title="API Route - Session Cookie"
+              isActive={activeTab === 'cookie'}
+              onClick={() => setActiveTab('cookie')}
+            />
+            <TabSelectorButton
+              title="API Route - Access Token"
+              isActive={activeTab === 'token'}
+              onClick={() => setActiveTab('token')}
+            />
           </div>
-          <div className="my-8 mx-auto">
-            <h2 className="mb-4 font-bold">Client-side API Route Call</h2>
-            <FetchButton />
+          <div className="flex flex-col gap-2 w-full">
+            {activeTab === 'cookie' && <CookieTestForm />}
+            {activeTab === 'token' && <TokenTestForm />}
           </div>
-          <div className="my-8 mx-auto">
-            <h2 className="mb-4 font-bold">Form Action</h2>
-            <NameForm />
-          </div>
-        </>
+        </div>
       )}
     </section>
   );

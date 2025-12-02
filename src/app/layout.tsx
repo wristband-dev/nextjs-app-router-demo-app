@@ -3,8 +3,8 @@ import { Inter } from 'next/font/google';
 
 import './globals.css';
 
-import { Navbar } from '@/components/sticky-navbar';
-import { WristbandAuthProviderWrapper } from '@/context/wristband-auth-provider-wrapper';
+import { Navbar } from '@/components';
+import { WristbandAuthProviderWrapper } from '@/auth';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +21,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* WRISTBAND_TOUCHPOINT - AUTHENTICATION */}
         <WristbandAuthProviderWrapper>
           <Navbar />
-          <main className="min-h-[100vh] p-8 pt-24 pb-8">{children}</main>
+          <div
+            className={`font-geist-sans flex flex-col items-center justify-items-center min-h-screen p-8 pt-16 bg-slate-50 dark:bg-slate-900`}
+          >
+            <main
+              className={`flex flex-col gap-8 row-start-2 items-center w-full max-w-2xl text-center ${inter.className}`}
+            >
+              {children}
+            </main>
+          </div>
         </WristbandAuthProviderWrapper>
       </body>
     </html>
