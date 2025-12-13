@@ -114,7 +114,7 @@ Users of this app can access the Application-level Login Page (Tenant Discovery 
 
 - `https://{application_vanity_domain}/login`, where `{application_vanity_domain}` should be replaced with the value of the "Application Vanity Domain" value of the application (can be found in the Wristband Dashboard by clicking the Application Settings side menu of this app).
 
-This login page is hosted by Wristband.  Here, the user will be prompted to enter their tenant's domain name for which they want to log in to.  Successfully entering the tenant domain name will redirect the user to the tenant-level login page for their specific tenant.
+This login page is hosted by Wristband.  Here, the user will be prompted to enter their tenant's name for which they want to log in to.  Successfully entering the tenant name will redirect the user to the tenant-level login page for their specific tenant.
 
 Users also have the option here to execute the Forgot Tenant workflow and entering their email address in order to receive a list of all tenants that they belong to.
 
