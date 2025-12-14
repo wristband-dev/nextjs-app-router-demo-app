@@ -28,7 +28,7 @@ export function TokenTestForm() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          redirectToLogin('/api/auth/login', { tenantDomain: tenantName });
+          redirectToLogin('/api/auth/login', { tenantName });
           window.alert('Authentication required.');
         } else {
           window.alert(`HTTP error! status: ${response.status}`);
@@ -42,7 +42,7 @@ export function TokenTestForm() {
 
       if (error instanceof WristbandError) {
         window.alert('Authentication required.');
-        redirectToLogin('/api/auth/login', { tenantDomain: tenantName });
+        redirectToLogin('/api/auth/login', { tenantName });
       } else {
         window.alert(`Unexpected error: ${error}`);
       }
