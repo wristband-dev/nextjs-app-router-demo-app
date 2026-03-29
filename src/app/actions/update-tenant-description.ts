@@ -53,6 +53,6 @@ export async function updateTenantDescription(
   session.tenantDescription = description;
   await saveServerActionSession(cookieStore, session);
 
-  const tenant = await response.json() as Tenant;
+  const tenant = (await response.json()) as Tenant;
   return { message: tenant.description, authError: false };
 }
