@@ -8,7 +8,7 @@ import {
   MutableSession,
   NextJsCookieStore,
   saveSessionWithCookies,
-  SessionOptions
+  SessionOptions,
 } from '@wristband/nextjs-auth';
 
 import { MySessionData } from '@/types';
@@ -17,7 +17,7 @@ import { MySessionData } from '@/types';
 
 /**
  * Wristband authentication client for handling OAuth flows (login, callback, logout).
- * 
+ *
  * Use this client to:
  * - Initiate login redirects: `wristbandAuth.appRouter.login()`
  * - Handle OAuth callbacks: `wristbandAuth.appRouter.callback()`
@@ -29,27 +29,27 @@ export const wristbandAuth = createWristbandAuth({
   clientSecret: process.env.CLIENT_SECRET!,
   wristbandApplicationVanityDomain: process.env.APPLICATION_VANITY_DOMAIN!,
   scopes: ['openid', 'offline_access', 'profile', 'email', 'roles'],
-  dangerouslyDisableSecureCookies: true,  // IMPORTANT: Only for local development. Remove in Prod!
+  dangerouslyDisableSecureCookies: true, // IMPORTANT: Only for local development. Remove in Prod!
 });
 
 /**
  * Session configuration used across all session management utilities.
- * 
+ *
  * IMPORTANT: In production, use a strong secret and set "secure: true".
  */
 const sessionOptions: SessionOptions = { secrets: 'dummy-value-463a-812c-0d8db87c0ec5c1', secure: false };
 
 /**
  * Authentication middleware that protects routes in the Next.js middleware/proxy.
- * 
+ *
  * Supports two authentication strategies (tried in the order listed):
  * 1. JWT - Validates Bearer tokens in Authorization header
  * 2. SESSION - Validates session cookies and refreshes expired tokens
- * 
+ *
  * When protected routes fail all auth strategies:
  * - APIs: "/api/v1/*" - Returns 401 if unauthenticated
  * - Pages: "/", "/server" - Defaults to a redirect to Login Endpoint (Client and Server Components only)
- * 
+ *
  * NOTE: Server Actions are NOT protected by this middleware and must use check auth in the action's code.
  */
 export const requireMiddlewareAuth = wristbandAuth.createMiddlewareAuth<MySessionData>({
@@ -61,17 +61,17 @@ export const requireMiddlewareAuth = wristbandAuth.createMiddlewareAuth<MySessio
 
 /**
  * Authentication helper specifically for Server Actions.
- * 
+ *
  * Since Server Actions bypass the Next.js middleware/proxy, they must perform their own auth checks.
  * This helper validates the session and automaticallyrefreshes expired tokens.
  */
 export const requireServerActionAuth = wristbandAuth.appRouter.createServerActionAuth<MySessionData>({
-  sessionOptions
+  sessionOptions,
 });
 
 /**
  * Retrieves the session from a NextRequest.
- * 
+ *
  * Use in:
  * - API Route Handlers
  * - Middleware/proxy functions
@@ -82,7 +82,7 @@ export function getRequestSession(request: NextRequest) {
 
 /**
  * Retrieves read-only session for Server Components.
- * 
+ *
  * Server Components render during the RSC render phase and cannot set response headers
  * or modify cookies. For mutations, use Server Actions or API routes instead.
  */
@@ -92,7 +92,7 @@ export function getServerComponentSession(cookieStore: NextJsCookieStore) {
 
 /**
  * Retrieves mutable session for Server Actions.
- * 
+ *
  * Unlike Server Components, Server Actions can modify the session. Use this to
  * get a session that can be updated and saved back to cookies.
  */
@@ -102,7 +102,7 @@ export async function getServerActionSession(cookieStore: NextJsCookieStore) {
 
 /**
  * Saves modified session data back to cookies in Server Actions.
- * 
+ *
  * Call this after making changes to a mutable session to persist the updates.
  */
 export async function saveServerActionSession(cookieStore: NextJsCookieStore, session: MutableSession<MySessionData>) {
@@ -111,7 +111,7 @@ export async function saveServerActionSession(cookieStore: NextJsCookieStore, se
 
 /**
  * Destroys the session and clears session cookies in Server Actions.
- * 
+ *
  * Use this for custom logout flows or when you need to clear the session
  * without redirecting to Wristband's logout endpoint.
  */

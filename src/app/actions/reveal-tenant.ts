@@ -34,6 +34,6 @@ export async function revealTenant(): Promise<ServerActionState> {
     return { message: `There was an unexpected error. Try again.`, authError: false };
   }
 
-  const tenant = await response.json() as Tenant;
+  const tenant = (await response.json()) as Tenant;
   return { message: JSON.stringify(tenant, null, 2), authError: false };
 }

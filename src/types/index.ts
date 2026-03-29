@@ -22,7 +22,7 @@ export type MySessionMetadata = {
  * Response data for the Hello World API route handlers.
  */
 export type HelloWorldData = {
-  message: string
+  message: string;
 };
 
 export type ServerActionState = {

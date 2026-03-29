@@ -4,7 +4,7 @@ import { HelloWorldData } from '@/types';
 
 export async function POST(request: NextRequest) {
   let body;
-  
+
   try {
     body = await request.json();
   } catch (error) {
