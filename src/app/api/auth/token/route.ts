@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { NO_CACHE_HEADERS } from '@/constants';
 import { getRequestSession } from '@/wristband';
 
 /**
@@ -13,5 +12,5 @@ import { getRequestSession } from '@/wristband';
 export async function GET(req: NextRequest) {
   const session = await getRequestSession(req);
   const tokenResponse = session.getTokenResponse();
-  return NextResponse.json(tokenResponse, { headers: NO_CACHE_HEADERS });
+  return NextResponse.json(tokenResponse);
 }
