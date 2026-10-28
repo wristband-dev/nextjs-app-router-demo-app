@@ -10,7 +10,8 @@
   <p align="center">
     <b>
       <a href="https://wristband.dev">Website</a> •
-      <a href="https://docs.wristband.dev">Documentation</a>
+      <a href="https://docs.wristband.dev">Documentation</a> •
+      <a href="https://docs.wristband.dev/llms.txt">LLMs.txt</a>
     </b>
   </p>
 </div>
@@ -37,9 +38,9 @@ This is a multi-tenant demo app that serves other companies as its customers. Th
 
 You can start up the demo application in a few simple steps.
 
-### 1) Sign up for an Wristband account.
+### 1) Sign up for a Wristband account.
 
-First thing is first: make sure you sign up for an Wristband account at [https://wristband.dev](https://wristband.dev).
+First thing is first: make sure you sign up for a Wristband account at [https://wristband.dev](https://wristband.dev).
 
 ### 2) Provision the Next.js App Router demo application in the Wristband Dashboard.
 
@@ -53,13 +54,13 @@ You can also follow the [Demo App Guide](https://docs.wristband.dev/docs/setting
 
 ### 3) Apply your Wristband configuration values to the Next.js server configuration
 
-Upon completing the demo application setup, you will be prompted with values that you should copy into the environment variable configuration for this demo repository, which is located in `.env`.  Replace the following values:
+After completing demo app creation, you will be prompted with values that you should use to create environment variables for the Next.js server. You should see:
 
 - `APPLICATION_VANITY_DOMAIN`
 - `CLIENT_ID`
 - `CLIENT_SECRET`
 
-Copy those values, then create an environment variable file in the root directory of this project: `.env`. Once created, paste the copied values into this file.
+Copy those values, then create an environment variable file on the server at: `.env`. Once created, paste the copied values into this file.
 
 ### 4) Install dependencies
 
@@ -71,8 +72,6 @@ Before attempting to run the application, you'll need to install all project dep
 ```npm install```
 
 ### 5) Run the application
-
-You can run Next.js to accomodate either localhost or vanity domain URL formats, depending on what you choose when provisioning the demo app in the Wristband Dashboard.
 
 #### Run the server with "localhost" URLs
 
@@ -98,13 +97,13 @@ The Next.js server holds the client credentials, runs the full OAuth2 login flow
 
 Now that the demo app is up and running, you can sign up your first customer on the Signup Page at the following location:
 
-- `https://{application_vanity_domain}/signup`, where `{application_vanity_domain}` should be replaced with the value of the "Application Vanity Domain" value of the application (can be found in the Wristband Dashboard by clicking the Application Details side menu of this app).
+- `https://{application_vanity_domain}/signup`, where `{application_vanity_domain}` should be replaced with the value of the "Application Vanity Domain" value of the application (can be found in the Wristband Dashboard by clicking the Application Settings side menu of this app).
 
 This signup page is hosted by Wristband.  Completing the signup form will provision both a new tenant with the specified tenant name and a new user that is assigned to that tenant.
 
 ### Home Page
 
-For reference, the home page of this Inovtastic for Business app can be accessed at the following locations:
+For reference, the home page of this app can be accessed at the following locations:
 
 - Localhost domain format: [http://localhost:6001/](http://localhost:6001/)
 
@@ -122,7 +121,7 @@ Users also have the option here to execute the Forgot Tenant workflow and enteri
 
 If users wish to directly access the Tenant-level Login Page without having to go through Tenant Discovery, they can do so at the following locations:
 
-- Localhost domain format: [http://localhost:6001/api/auth/login?tenant_name={tenant_name}](http://localhost:6001/home), where `{tenant_name}` should be replaced with the value of the desired tenant's name.
+- Localhost domain format: `http://localhost:6001/api/auth/login?tenant_name={tenant_name}`, where `{tenant_name}` should be replaced with the value of the desired tenant's name.
 
 This login page is hosted by Wristband.  Here, the user will be prompted to enter their credentials in order to login to the application.
 

@@ -42,7 +42,7 @@ export function RequireAuthServerActionForm() {
           <button
             type="button"
             className="shadow-md cursor-pointer bg-blue-500 text-white py-2 px-4 rounded hover:brightness-90 transition ease-in-out duration-200"
-            onClick={() => redirectToLogin('/api/auth/login')}
+            onClick={() => redirectToLogin('/api/auth/login', { returnUrl: window.location.pathname })}
           >
             Login
           </button>
